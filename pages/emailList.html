@@ -1,0 +1,10 @@
+<div class="jumbotron text-center">
+	<table class="table table-condensed table-hover">
+	    <tr><td>发送者</td><td>主题</td><td>日期</td></tr>
+	    <tr ng-repeat="email in emails">
+	        <td>{{email.sender}}</td>
+	        <td><a href="#emails/{{email.id}}">{{email.subject}}</a></td>
+	        <td>{{email.date}}</td>
+	    </tr>
+	</table>
+</div>

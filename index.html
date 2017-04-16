@@ -1,0 +1,66 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html ng-app="scotchApp">
+<head>
+	<meta charset="utf-8">
+	<!-- <base href="/mySPA/"> -->
+  <!-- SCROLLS -->
+  <!-- load bootstrap and fontawesome via CDN -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+
+  <!-- SPELLS -->
+  <!-- load angular via CDN -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script> -->
+   <!-- <script src="//cdn.bootcss.com/angular.js/1.6.4/angular.js"></script>
+  <script src="//cdn.bootcss.com/angular.js/1.6.4/angular-route.js"></script> -->
+	<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+	<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.js"></script>
+  <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+	<script src="http://apps.bdimg.com/libs/angular-route/1.3.13/angular-route.js"></script>
+  <script src="script.js"></script>
+</head>
+<body ng-controller="appController">
+
+	<!-- HEADER AND NAVBAR -->
+	<header>
+		<nav class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">Angular Routing Example</a>
+			</div>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#/"><i class="fa fa-home"></i> Home</a></li>
+				<li><a href="#emails"><i class="fa fa-shield"></i> Email</a></li>
+				<li><a href="#about"><i class="fa fa-shield"></i> About</a></li>
+				<li><a href="#contact"><i class="fa fa-comment"></i> Contact</a></li>
+			</ul>
+		</div>
+		</nav>
+	</header>
+
+	<!-- MAIN CONTENT AND INJECTED VIEWS -->
+	<div id="main">
+		<!-- angular templating -->
+		<!-- this is where content will be injected -->
+		<div ng-view></div>
+	</div>
+
+	
+	<pre>
+	<ol ng-controller="preController">
+		<li>$location.path() = {{$location.path()}}</li>
+	  <li>$route.current.templateUrl = {{$route.current.templateUrl}}</li>
+	  <li>$route.current.params = {{$route.current.params}}</li>
+	  <li>$route.current.scope.name = {{$route.current.scope.name}}</li>
+	  <li>$routeParams = {{$routeParams}}</li>
+	</ol>
+  </pre>
+	<!-- FOOTER -->
+	<footer class="text-center">
+		View the tutorial on <a href="http://scotch.io/tutorials/angular-routing-and-templating-tutorial">Scotch.io</a>
+	</footer>
+
+</body>
+</html>
