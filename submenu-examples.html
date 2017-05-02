@@ -1,0 +1,127 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html ng-app="scotchApp">
+
+<head>
+    <meta charset="utf-8">
+    <!-- <base href="/mySPA/"> -->
+    <!-- SCROLLS -->
+    <!-- load bootstrap and fontawesome via CDN -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="bootstrap-submenu-2.0.4/css/bootstrap-submenu.min.css">
+    <!-- SPELLS -->
+    <!-- load angular via CDN -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script> -->
+    <!-- <script src="//cdn.bootcss.com/angular.js/1.6.4/angular.js"></script>
+  <script src="//cdn.bootcss.com/angular.js/1.6.4/angular-route.js"></script> -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.js"></script>
+    <script src="bootstrap-submenu-2.0.4/js/bootstrap-submenu.min.js"></script>
+</head>
+
+<body ng-controller="appController">
+    <!-- HEADER AND NAVBAR -->
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Angular Routing Example</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#/"><i class="fa fa-home"></i> Home</a></li>
+                    <li><a href="#emails"><i class="fa fa-shield"></i> Email</a></li>
+                    <li><a href="#about"><i class="fa fa-shield"></i> About</a></li>
+                    <li><a href="#contact"><i class="fa fa-comment"></i> Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" data-submenu>
+                    Dropdown <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-submenu">
+                        <a tabindex="0">Action</a>
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="0">Sub action</a></li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="0">Another sub action</a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="0">Sub action</a></li>
+                                    <li><a tabindex="0">Another sub action</a></li>
+                                    <li><a tabindex="0">Something else here</a></li>
+                                </ul>
+                            </li>
+                            <li><a tabindex="0">Something else here</a></li>
+                            <li class="disabled"><a tabindex="-1">Disabled action</a></li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="0">Another action</a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="0">Sub action</a></li>
+                                    <li><a tabindex="0">Another sub action</a></li>
+                                    <li><a tabindex="0">Something else here</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-header">Dropdown header</li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="0">Another action</a>
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="0">Sub action</a></li>
+                            <li><a tabindex="0">Another sub action</a></li>
+                            <li><a tabindex="0">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li><a tabindex="0">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li><a tabindex="0">Separated link</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" data-submenu>
+                    请选择 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-submenu">
+                        <a tabindex="0">菜单1</a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-submenu">
+                                <a tabindex="0">菜单1-1</a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="0">菜单1-1-1</a></li>
+                                    <li><a tabindex="0">菜单1-1-2</a></li>
+                                </ul>
+                            </li>
+                            <li><a tabindex="0">菜单1-2</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="0">菜单2</a>
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="0">菜单2-1</a></li>
+                            <li><a tabindex="0">菜单2-2</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a tabindex="0">菜单3</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- FOOTER -->
+    <footer class="text-center">
+        View the tutorial on <a href="http://scotch.io/tutorials/angular-routing-and-templating-tutorial">Scotch.io</a>
+    </footer>
+    <script type="text/javascript">
+    $('[data-submenu]').submenupicker();
+    </script>
+</body>
+
+</html>
