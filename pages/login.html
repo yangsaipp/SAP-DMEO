@@ -3,8 +3,9 @@
 	<h1>Login Page</h1>
 
 	<p>{{ message }}</p>
-	<input class="form-control" id="exampleInputEmail1" ng-model="user.role" placeholder="roles">
-	<button type="button" class="btn btn-primary" ng-click="login()">Save changes</button>
+  <input class="form-control" ng-model="user.account" placeholder="账号">
+  <input class="form-control" ng-model="user.password" placeholder="密码">
+	<button type="button" class="btn btn-primary" ng-click="login()">登录</button>
 </div>
 <!-- <div id="loginModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">

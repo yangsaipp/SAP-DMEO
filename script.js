@@ -4,6 +4,58 @@
 // also include ngRoute for all our routing needs
 
 var scotchApp = angular.module('scotchApp', ['ngRoute']);
+
+scotchApp.factory('HttpExpectionInterceptor', ['$q', '$window', function ($q, $window) {
+	return {
+	    request: function(config){
+	    	if(!config.url.endsWith(".html")) {
+	    		config.url = "http://10.10.31.166:8080/api" + config.url;
+	    		config.headers['Access-Control-Allow-Origin'] = '*';
+	    	}
+	    	console.log("==request:%o", config);
+	    	return config;
+	    },
+	    requestError: function(err){
+	    	//console.log("requestError:%o", err);
+	    	return $q.reject(err);
+	    },
+	    response: function(res){
+	   		//console.log("response:%o", res);
+	      	return res;
+	    },
+	    responseError: function(err){
+	    	if($window.parent && $window.parent.alertShow) {
+	    		if(err.config.method == 'GET') {
+	    			$window.parent.alertShow('error', '页面加载数据失败，请刷新页面或者联系维护人员。');
+	    		} else if(err.config.method == 'PUT' || err.config.method == 'POST') {
+	    			$window.parent.alertShow('error', '数据保存失败，请重新保存或者联系维护人员。');
+	    		} else if(err.config.method == 'DELETE') {
+	    			$window.parent.alertShow('error', '删除失败，请重新保存或者联系维护人员。');
+	    		} else {
+	    			$window.parent.alertShow('error', '操作失败，请重试或者联系维护人员。');
+	    		}
+	    	}
+
+		    if(-1 === err.status) {
+
+		    } else if(500 === err.status) {
+
+		    } else if(501 === err.status) {
+		        // ...
+		    }
+	      return $q.reject(err);
+	    }
+    };
+}]);
+
+
+// 添加对应的 Interceptors
+scotchApp.config(['$httpProvider', function($httpProvider){
+	$httpProvider.interceptors.push('HttpExpectionInterceptor');
+	$httpProvider.defaults.withCredentials = false;  
+    $httpProvider.defaults.headers.common = { 'Access-Control-Allow-Origin' : '*' }  
+}]);
+
 // create the controller and inject Angular's $scope
 scotchApp.controller('mainController', function($scope) {
 	// create a message to display in our view
@@ -18,11 +70,16 @@ scotchApp.controller('contactController', function($scope) {
 	$scope.message = 'Contact us! JK. This is just a demo.';
 });
 
-scotchApp.controller('loginController', function($rootScope, $scope, $location) {
+scotchApp.controller('loginController', function($rootScope, $scope, $location, $http) {
 	console.log($location);
 	$scope.message = 'Look! I am an login page. I want to ' + $location.search().originalPath;
 	$scope.user = {};
 	$scope.login = function () {
+
+		$http.post('/login', $scope.user).then(function (response) {
+			console.log(response);
+		});
+
 		$rootScope.user = $scope.user;
 		// $('#loginModal').modal('toggle');
 		$location.path($location.search().originalPath);

@@ -1,1 +1,1 @@
-browser-sync start --server --files "./" --reload-delay 1500 --no-open
+browser-sync start --server --files "./" --reload-delay 1500 --no-open 
