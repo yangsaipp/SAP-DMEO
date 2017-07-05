@@ -9,8 +9,9 @@ scotchApp.factory('HttpExpectionInterceptor', ['$q', '$window', function ($q, $w
 	return {
 	    request: function(config){
 	    	if(!config.url.endsWith(".html")) {
-	    		config.url = "http://10.10.31.166:8080/api" + config.url;
+	    		config.url = "http://127.0.0.1:8080/api" + config.url;
 	    		config.headers['Access-Control-Allow-Origin'] = '*';
+	    		config.headers['x-auth-token'] = window.localStorage.token;
 	    	}
 	    	console.log("==request:%o", config);
 	    	return config;
@@ -77,12 +78,18 @@ scotchApp.controller('loginController', function($rootScope, $scope, $location, 
 	$scope.login = function () {
 
 		$http.post('/login', $scope.user).then(function (response) {
-			console.log(response);
+			window.localStorage.token = response.data;
+			window.document.cookie = 'token=' + response.data;
+			$http.get('/account').then(function(response) {
+				$rootScope.user = response.data;
+				$rootScope.user.role = 'admin';
+				$location.path($location.search().originalPath);
+			});
 		});
 
-		$rootScope.user = $scope.user;
+		//$rootScope.user = $scope.user;
 		// $('#loginModal').modal('toggle');
-		$location.path($location.search().originalPath);
+		
 	};
 
 });
