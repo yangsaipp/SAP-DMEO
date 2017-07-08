@@ -5,7 +5,7 @@
 
 var scotchApp = angular.module('scotchApp', ['ngRoute']);
 
-scotchApp.factory('HttpExpectionInterceptor', ['$q', '$window', function ($q, $window) {
+scotchApp.factory('HttpExpectionInterceptor', ['$q', '$window', '$location', function ($q, $window, $location) {
 	return {
 	    request: function(config){
 	    	if(!config.url.endsWith(".html")) {
@@ -21,7 +21,12 @@ scotchApp.factory('HttpExpectionInterceptor', ['$q', '$window', function ($q, $w
 	    	return $q.reject(err);
 	    },
 	    response: function(res){
-	   		//console.log("response:%o", res);
+	    	console.log(res.headers("token"));
+	   		if(res.headers("token")) {
+	   			
+	   			console.log("更新token:%s", res.headers("token"));
+	   			window.localStorage.token = res.headers("token");
+	   		}
 	      	return res;
 	    },
 	    responseError: function(err){
@@ -41,8 +46,8 @@ scotchApp.factory('HttpExpectionInterceptor', ['$q', '$window', function ($q, $w
 
 		    } else if(500 === err.status) {
 
-		    } else if(501 === err.status) {
-		        // ...
+		    } else if(401 === err.status) {
+		        $location.path("/login");
 		    }
 	      return $q.reject(err);
 	    }
@@ -79,20 +84,29 @@ scotchApp.controller('loginController', function($rootScope, $scope, $location, 
 
 		$http.post('/login', $scope.user).then(function (response) {
 			window.localStorage.token = response.data;
-			window.document.cookie = 'token=' + response.data;
+			//window.document.cookie = 'token=' + response.data;
 			$http.get('/account').then(function(response) {
 				$rootScope.user = response.data;
 				$rootScope.user.role = 'admin';
-				$location.path($location.search().originalPath);
+				if($location.search().originalPath) {
+					$location.path($location.search().originalPath);
+				}else {
+					$location.path('/');
+				}
 			});
 		});
-
-		//$rootScope.user = $scope.user;
-		// $('#loginModal').modal('toggle');
-		
 	};
 
 });
+
+scotchApp.controller('loginoutController', function($rootScope, $scope, $location, $http) {
+	console.log("loginoutController");
+   	$http.delete('/loginOut').then(function (response) {
+    	window.localStorage.removeItem('token');
+    	$scope.message = '登出成功';
+   	});
+
+ });
 
 // scotchApp.constant('USER_ROLES', {
 //   all: '*',
@@ -101,18 +115,26 @@ scotchApp.controller('loginController', function($rootScope, $scope, $location, 
 //   guest: 'guest'
 // });
 
-scotchApp.controller('appController', function($rootScope, $scope, $location) {
+scotchApp.controller('appController', function($rootScope, $scope, $location, $http) {
 
      $rootScope.$on('$routeChangeStart', function (event, next, current) {
      	console.log('$routeChangeStart:event[%o], next[%o], current[%o]', event, next, current);
      	var authorizedRoles = next.authorizedRoles;
      	console.log('$routeChangeStart:authorizedRoles[%o]', authorizedRoles);
      	if(authorizedRoles) {
-     		if($rootScope.user == null || $rootScope.user == {}) {
-     			$location.search({originalPath: $location.path()});
-     			$location.path("/login");
-     		} else if(authorizedRoles[0] != $rootScope.user.role) {
-     			$location.path("/login");
+     		if(($rootScope.user == null || $rootScope.user == {} ) && window.localStorage.token) {
+     			// 获取登录用户
+ 				$http.get('/account').then(function(response) {
+					$rootScope.user = response.data;
+					$rootScope.user.role = 'admin';
+
+					if($rootScope.user == null || $rootScope.user == {}) {
+						$location.search({originalPath: $location.path()});
+		 				$location.path("/login");
+		     		} else if(authorizedRoles[0] != $rootScope.user.role) {
+		     			$location.path("/login");
+		     		}
+				});
      		}
      	}
 	 });
@@ -127,6 +149,8 @@ scotchApp.controller('preController', function($rootScope, $scope, $route, $rout
      $scope.$location = $location;
      $scope.$routeParams = $routeParams;
  });
+
+
 
 //邮件
 var messages=[{
@@ -145,12 +169,19 @@ var messages=[{
     message:"姐夫明天请我吃饭啦。"
 }];
 
-scotchApp.controller('emailList', ['$scope', function($scope){
-    $scope.emails=messages;
+scotchApp.controller('emailList', ['$scope','$http', function($scope, $http){
+	$http.get('/routes').then(function(response){
+		console.log(response);
+    	$scope.emails=messages;
+	});
 }]);
 
-scotchApp.controller('emailDetail',['$scope','$routeParams',function($scope,$routeParams){
-    $scope.email=messages[$routeParams.id];
+scotchApp.controller('emailDetail',['$scope','$routeParams', '$http', function($scope,$routeParams, $http){
+	$http.get('/routes/' + $routeParams.id).then(function(response){
+		console.log(response);
+    	$scope.email=messages[$routeParams.id];
+	});
+    
 }]);
 
 // configure our routes
@@ -185,6 +216,10 @@ scotchApp.config(function($routeProvider, $locationProvider) {
 	    .when('/login',{
 	        controller:'loginController',
 	        templateUrl:'./pages/login.html'
+	    })
+	    .when('/loginout',{
+	        controller:'loginoutController',
+	        templateUrl:'./pages/loginOut.html'
 	    })
 	    .otherwise({
         	redirectTo: '/'
